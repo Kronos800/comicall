@@ -12,6 +12,7 @@ import android.widget.EditText;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -28,11 +29,12 @@ public class AuthActivity extends AppCompatActivity {
         findViewById(R.id.signUpButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                EditText emailEdit = findViewById(R.id.emailEditText);
-                String email = emailEdit.getText().toString();
+                TextInputLayout emailEdit = findViewById(R.id.emailEditText);
+                emailEdit.setHintAnimationEnabled(false);
+                String email = emailEdit.getEditText().getText().toString();
 
-                EditText passwordEdit = findViewById(R.id.passwordEditText);
-                String password = passwordEdit.getText().toString();
+                TextInputLayout passwordEdit = findViewById(R.id.passwordEditText);
+                String password = passwordEdit.getEditText().getText().toString();
 
                 if(!email.isEmpty() && !password.isEmpty()){
                     FirebaseAuth.getInstance().createUserWithEmailAndPassword(email,password)
@@ -52,11 +54,11 @@ public class AuthActivity extends AppCompatActivity {
         findViewById(R.id.loginButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                EditText emailEdit = findViewById(R.id.emailEditText);
-                String email = emailEdit.getText().toString();
+                TextInputLayout emailEdit = findViewById(R.id.emailEditText);
+                String email = emailEdit.getEditText().getText().toString();
 
-                EditText passwordEdit = findViewById(R.id.passwordEditText);
-                String password = passwordEdit.getText().toString();
+                TextInputLayout passwordEdit = findViewById(R.id.passwordEditText);
+                String password = passwordEdit.getEditText().getText().toString();
 
                 if(!email.isEmpty() && !password.isEmpty()){
                     FirebaseAuth.getInstance().signInWithEmailAndPassword(email,password)
