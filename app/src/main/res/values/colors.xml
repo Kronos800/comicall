@@ -11,4 +11,5 @@
     <color name="marvel_red">#F2131E</color>
     <color name="marvel_grey">#202020</color>
     <color name="mtrl_textinput_default_box_stroke_color">#fff</color>
+    <color name="dialog_overlay">#88000000</color>
 </resources>

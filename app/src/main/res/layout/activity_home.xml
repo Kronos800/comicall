@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AuthActivity"
+    tools:context=".LoginActivity"
     android:background="@drawable/gradient">
 
     <LinearLayout
@@ -27,18 +27,8 @@
                 android:id="@+id/saveButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="guardar" />
+                android:text="cerrar sesion" />
 
-            <EditText
-                android:id="@+id/usernameEditName"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginLeft="16dp"
-                android:ems="10"
-                android:inputType="textPersonName"
-                android:text="user"
-                app:layout_constraintStart_toStartOf="parent" />
         </LinearLayout>
     </LinearLayout>
 
