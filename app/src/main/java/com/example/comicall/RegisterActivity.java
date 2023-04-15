@@ -112,7 +112,7 @@ public class RegisterActivity  extends AppCompatActivity {
         dialog.show();
     }
     private void showHome(String email){
-        Intent homeIntent = new Intent(this,HomeActivity.class);
+        Intent homeIntent = new Intent(this,MainActivity.class);
         homeIntent.putExtra("email",email);
         startActivity(homeIntent);
     }
