@@ -1,14 +1,86 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/frameLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/gradient"
+    android:visibility="visible"
     tools:context=".SearchFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="SEARCH FRAGMENT" />
+        android:layout_height="match_parent">
 
+        <android.widget.SearchView
+            android:id="@+id/searchView"
+            android:layout_width="283dp"
+            android:layout_height="70dp"
+            android:layout_marginStart="2dp"
+            android:layout_marginTop="22dp"
+            android:layout_marginEnd="2dp"
+            android:background="@color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="MissingConstraints" />
+
+        <RadioGroup
+            android:id="@+id/radioGroup"
+            android:layout_width="273dp"
+            android:layout_height="62dp"
+            android:layout_marginStart="95dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="95dp"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/searchView"
+            tools:ignore="MissingConstraints">
+
+            <RadioButton
+                android:id="@+id/TituloRadioButton"
+                android:layout_width="96dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:buttonTint="@color/white"
+                android:text="Título"
+                android:textColor="@color/white"
+                android:textStyle="bold" />
+
+            <RadioButton
+                android:id="@+id/PersonajeRadioButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:buttonTint="@color/white"
+                android:text="Personaje"
+                android:textColor="@color/white"
+                android:textStyle="bold" />
+        </RadioGroup>
+
+        <Button
+            android:id="@+id/SearchButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="151dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="166dp"
+            android:text="BUSCAR"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/radioGroup" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="386dp"
+            android:layout_height="388dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="11dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/SearchButton" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>
