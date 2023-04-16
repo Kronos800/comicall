@@ -22,9 +22,16 @@ import java.util.List;
 
 public class ComicLoader extends AsyncTask<String, Void, List<Comic>> {
 
-    private static final String MARVEL_BASE_URL = "https://gateway.marvel.com/v1/public/";
-    private static final String TS_KEY_HASH = "&ts=1&apikey=f87fcb47ed4e50c7c9736f88c40518ca&hash=6199108e5f83d03422c12931ed4b05eb";
-    private static final String COMICS_SEARCH = "comics?dateDescriptor=thisMonth&limit=100";
+    private static final String MARVEL_BASE_URL_COMICS = "https://gateway.marvel.com/v1/public/comics?";
+
+    private static final String TIME_STAMP = "ts";
+
+    private static final String API_KEY = "apikey";
+
+    private static final String HASH_MD5 = "hash";
+
+    private static final String DATE_DESCRIPTOR = "dateDescriptor";
+    private static final String LIMIT = "limit";
     private OnTaskCompleted listener;
 
     public ComicLoader(@NonNull Context context,OnTaskCompleted listener) {
@@ -36,13 +43,16 @@ public class ComicLoader extends AsyncTask<String, Void, List<Comic>> {
     @Override
     protected List<Comic> doInBackground(String... strings) {
 
-            /*Uri builtURI = Uri.parse(MARVEL_BASE_URL).buildUpon()
-                    .appendPath(COMICS_SEARCH)
-                    .appendPath(TS_KEY_HASH)
-                    .build();*/
+        // Build up the query URI, limiting results to 40 printed books.
+        Uri builtURI = Uri.parse(MARVEL_BASE_URL_COMICS).buildUpon()
+                .appendQueryParameter(DATE_DESCRIPTOR, "thisMonth")
+                .appendQueryParameter(TIME_STAMP, "1")
+                .appendQueryParameter(API_KEY, "f87fcb47ed4e50c7c9736f88c40518ca")
+                .appendQueryParameter(HASH_MD5, "6199108e5f83d03422c12931ed4b05eb")
+                .appendQueryParameter(LIMIT, "100")
+                .build();
 
-            String url = MARVEL_BASE_URL+COMICS_SEARCH+TS_KEY_HASH;
-
+        String url = builtURI.toString();
         try {
             return downloadURL(url);
         } catch (IOException e) {

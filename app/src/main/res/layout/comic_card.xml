@@ -9,20 +9,20 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/comic_card"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
         android:layout_margin="2dp"
         app:cardCornerRadius="1dp"
         app:cardElevation="4dp"
-        app:cardUseCompatPadding="true">
+        app:cardUseCompatPadding="true"
+        android:backgroundTint="@android:color/transparent"
+        >
 
         <ImageView
             android:id="@+id/comic_image"
             android:layout_width="105dp"
-            android:layout_height="150dp"
-            android:adjustViewBounds="true"
-            android:scaleType="centerInside"/>
-
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"/>
 
     </androidx.cardview.widget.CardView>
 

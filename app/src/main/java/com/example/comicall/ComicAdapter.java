@@ -50,7 +50,6 @@ public class ComicAdapter extends RecyclerView.Adapter<ComicAdapter.ViewHolder> 
                 url = new URL(urlImage);
                 Glide.with(mContext)
                         .load(url)
-                        .centerCrop()
                         .into(holder.mImageView);
             } catch (MalformedURLException e) {
                 Log.d("Error", e.toString());
