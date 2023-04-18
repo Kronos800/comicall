@@ -83,7 +83,6 @@ public class ProfileFragment extends Fragment {
                 showLogin(bundle.getString("email"));
             }
         });
-
     }
     private void alertLogOut(){
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
