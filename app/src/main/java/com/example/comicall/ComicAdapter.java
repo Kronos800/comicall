@@ -30,6 +30,14 @@ public class ComicAdapter extends RecyclerView.Adapter<ComicAdapter.ViewHolder> 
         mComics = comics;
     }
 
+    public void setComicsData(List<Comic> data){
+        if(this.mComics == null || this.mComics.isEmpty()){
+            this.mComics = data;
+            return;
+        }
+        this.mComics.addAll(data);
+    }
+
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -62,6 +70,8 @@ public class ComicAdapter extends RecyclerView.Adapter<ComicAdapter.ViewHolder> 
     public int getItemCount() {
         return mComics.size();
     }
+
+    public void cleanList() { this.mComics.clear(); }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         private ImageView mImageView;
