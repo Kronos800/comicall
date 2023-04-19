@@ -23,7 +23,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ComicLoader extends AsyncTask<String, Void, List<Comic>>, AsyncTaskLoader<List<Comic>> implements Serializable {
+public class ComicLoader extends AsyncTaskLoader<List<Comic>> implements Serializable {
 
     private static final String MARVEL_BASE_URL_COMICS = "https://gateway.marvel.com/v1/public/comics?";
     private static final String MARVEL_BASE_URL_CHARACTER = "https://gateway.marvel.com/v1/public/characters?";

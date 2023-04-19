@@ -5,6 +5,8 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.loader.app.LoaderManager;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -13,6 +15,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.RadioGroup;
@@ -67,6 +71,7 @@ public class SearchFragment extends Fragment {
         }
 
         comicAdapter = new ComicAdapter(getContext(), new ArrayList<>());
+        comicLoaderCallbacks = new ComicLoaderCallbacks(this);
         LoaderManager loaderManager = LoaderManager.getInstance(this);
         if(loaderManager.getLoader(0) != null){
             loaderManager.initLoader(0,null, comicLoaderCallbacks);
@@ -80,21 +85,6 @@ public class SearchFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_search, container, false);
 
-        SearchView searchView = view.findViewById(R.id.searchView);
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                // El texto ingresado se envía al método searchComics
-                searchComics(view,query);
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                // No se hace nada aquí
-                return false;
-            }
-        });
 
         recyclerView = view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 3));
@@ -103,11 +93,61 @@ public class SearchFragment extends Fragment {
         progressBar = view.findViewById(R.id.progressBar);
         progressBar.setVisibility(View.GONE);
 
+
         return view;
     }
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
 
-    public void searchComics (View view, String searchText){
-        this.setProgressBarVisibility(View.VISIBLE);
+        // Obtener la vista raíz del Fragment
+        View rootView = view.getRootView();
+
+        // Registrar un OnGlobalLayoutListener en la vista raíz
+        rootView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                SearchView searchView = view.findViewById(R.id.searchView);
+
+                RadioGroup radioGroup = view.findViewById(R.id.SearchRadioGroup);
+                int selected = radioGroup.getCheckedRadioButtonId();
+
+                Button searchButton = view.findViewById(R.id.SearchButton);
+                searchButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        setProgressBarVisibility(View.VISIBLE);
+                        searchComics(selected, searchView.getQuery().toString());
+                    }
+                });
+
+
+                // Remover el OnGlobalLayoutListener después de que se haya ejecutado
+
+            }
+        });
+    }
+    /*
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        SearchView searchView = view.findViewById(R.id.searchView);
+
+        RadioGroup radioGroup = view.findViewById(R.id.SearchRadioGroup);
+        int selected = radioGroup.getCheckedRadioButtonId();
+
+        Button searchButton = view.findViewById(R.id.SearchButton);
+        searchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setProgressBarVisibility(View.VISIBLE);
+                searchComics(selected, searchView.getQuery().toString());
+            }
+        });
+    }
+*/
+    public void searchComics (int selected, String searchText){
+
         ConnectivityManager connectivityManager = (ConnectivityManager) getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
         if(!networkInfo.isConnected() || networkInfo == null){
@@ -116,10 +156,6 @@ public class SearchFragment extends Fragment {
 
         comicAdapter.cleanList();
         comicAdapter.notifyDataSetChanged();
-
-
-        RadioGroup radioGroup = view.findViewById(R.id.SearchRadioGroup);
-        int selected = radioGroup.getCheckedRadioButtonId();
 
 
         String searchType = "-1";
