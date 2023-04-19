@@ -53,7 +53,11 @@ public class ComicLoader extends AsyncTaskLoader<List<Comic>> implements Seriali
         this.searchType = searchType;
     }
 
+    public void onStartLoading(){
+        forceLoad();
+    }
 
+    /*
     protected List<Comic> doInBackground(String... strings) {
 
         // Build up the query URI, limiting results to 40 printed books.
@@ -72,6 +76,8 @@ public class ComicLoader extends AsyncTaskLoader<List<Comic>> implements Seriali
             throw new RuntimeException(e);
         }
     }
+    */
+
 
     private List<Comic> downloadURL(String myUrl) throws IOException {
         List<Comic> comics = new ArrayList<>();
@@ -121,14 +127,14 @@ public class ComicLoader extends AsyncTaskLoader<List<Comic>> implements Seriali
 
     protected void onPreExecute() {
         //super.onPreExecute();
-        ((HomeFragment)listener).setProgressBarVisibility(View.VISIBLE);
+        //((HomeFragment)listener).setProgressBarVisibility(View.VISIBLE);
     }
 
     protected void onPostExecute(List<Comic> comics) {
         //super.onPostExecute(comics);
-        ((HomeFragment)listener).setProgressBarVisibility(View.GONE);
-        listener.onTaskCompleted(comics);
-        listener.onTaskCompleted(comics);
+        //((HomeFragment)listener).setProgressBarVisibility(View.GONE);
+        //listener.onTaskCompleted(comics);
+        //listener.onTaskCompleted(comics);
     }
 
     @Nullable
@@ -148,7 +154,7 @@ public class ComicLoader extends AsyncTaskLoader<List<Comic>> implements Seriali
         if(searchType == "titulo"){
             builtURI = Uri.parse(MARVEL_BASE_URL_COMICS).buildUpon()
                     .appendQueryParameter(TIME_STAMP, "1")
-                    .appendQueryParameter(TITLE_STAMP, transformSpaces(searchText))
+                    .appendQueryParameter(TITLE_STAMP, searchText)
                     .appendQueryParameter(API_KEY, "f87fcb47ed4e50c7c9736f88c40518ca")
                     .appendQueryParameter(HASH_MD5, "6199108e5f83d03422c12931ed4b05eb")
                     .appendQueryParameter(LIMIT, "100")

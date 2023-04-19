@@ -41,6 +41,8 @@ public class SearchFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
+    RadioGroup radioGroup;
+
     private ComicLoaderCallbacks comicLoaderCallbacks;
     private ComicAdapter comicAdapter;
     private RecyclerView recyclerView;
@@ -108,21 +110,21 @@ public class SearchFragment extends Fragment {
             public void onGlobalLayout() {
                 SearchView searchView = view.findViewById(R.id.searchView);
 
-                RadioGroup radioGroup = view.findViewById(R.id.SearchRadioGroup);
-                int selected = radioGroup.getCheckedRadioButtonId();
+                radioGroup = view.findViewById(R.id.SearchRadioGroup);
+
 
                 Button searchButton = view.findViewById(R.id.SearchButton);
                 searchButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         setProgressBarVisibility(View.VISIBLE);
-                        searchComics(selected, searchView.getQuery().toString());
+                        searchComics(searchView.getQuery().toString());
                     }
                 });
 
 
                 // Remover el OnGlobalLayoutListener después de que se haya ejecutado
-
+                rootView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
             }
         });
     }
@@ -146,7 +148,7 @@ public class SearchFragment extends Fragment {
         });
     }
 */
-    public void searchComics (int selected, String searchText){
+    public void searchComics (String searchText){
 
         ConnectivityManager connectivityManager = (ConnectivityManager) getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
@@ -157,6 +159,8 @@ public class SearchFragment extends Fragment {
         comicAdapter.cleanList();
         comicAdapter.notifyDataSetChanged();
 
+
+        int selected = radioGroup.getCheckedRadioButtonId();
 
         String searchType = "-1";
         if(selected == R.id.TituloRadioButton){
