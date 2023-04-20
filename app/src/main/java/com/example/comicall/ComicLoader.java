@@ -41,16 +41,14 @@ public class ComicLoader extends AsyncTaskLoader<List<Comic>> implements Seriali
     private OnTaskCompleted listener;
 
     private String searchQuery = null;
-    private String searchType = null;
     public ComicLoader(@NonNull Context context,OnTaskCompleted listener) {
         super(context);
         this.listener = listener;
     }
 
-    public ComicLoader(@NonNull Context context, String searchQuery, String searchType) {
+    public ComicLoader(@NonNull Context context, String searchQuery) {
         super(context);
         this.searchQuery = searchQuery;
-        this.searchType = searchType;
     }
 
     public void onStartLoading(){
@@ -141,33 +139,24 @@ public class ComicLoader extends AsyncTaskLoader<List<Comic>> implements Seriali
     @Override
     public List<Comic> loadInBackground() {
         try {
-            return getComicJson(this.searchQuery, this.searchType);
+            return getComicJson(this.searchQuery);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
     }
 
-    public List<Comic> getComicJson(String searchText, String searchType) throws IOException {
-        // Build up the query URI
+    public List<Comic> getComicJson(String searchText) throws IOException {
+
         Uri builtURI = null;
-        if(searchType == "titulo"){
-            builtURI = Uri.parse(MARVEL_BASE_URL_COMICS).buildUpon()
-                    .appendQueryParameter(TIME_STAMP, "1")
-                    .appendQueryParameter(TITLE_STAMP, searchText)
-                    .appendQueryParameter(API_KEY, "f87fcb47ed4e50c7c9736f88c40518ca")
-                    .appendQueryParameter(HASH_MD5, "6199108e5f83d03422c12931ed4b05eb")
-                    .appendQueryParameter(LIMIT, "100")
-                    .build();
-        }else if(searchType == "personaje" ){
-            builtURI = Uri.parse(MARVEL_BASE_URL_CHARACTER).buildUpon()
-                    .appendQueryParameter(TIME_STAMP, "1")
-                    .appendQueryParameter(NAME_STAMP, transformSpaces(searchText))
-                    .appendQueryParameter(API_KEY, "f87fcb47ed4e50c7c9736f88c40518ca")
-                    .appendQueryParameter(HASH_MD5, "6199108e5f83d03422c12931ed4b05eb")
-                    .appendQueryParameter(LIMIT, "100")
-                    .build();
-        }
+
+        builtURI = Uri.parse(MARVEL_BASE_URL_COMICS).buildUpon()
+                .appendQueryParameter(TIME_STAMP, "1")
+                .appendQueryParameter(TITLE_STAMP, searchText)
+                .appendQueryParameter(API_KEY, "f87fcb47ed4e50c7c9736f88c40518ca")
+                .appendQueryParameter(HASH_MD5, "6199108e5f83d03422c12931ed4b05eb")
+                .appendQueryParameter(LIMIT, "100")
+                .build();
 
         String url = builtURI.toString();
         try {
@@ -179,17 +168,6 @@ public class ComicLoader extends AsyncTaskLoader<List<Comic>> implements Seriali
 
     public interface OnTaskCompleted {
         void onTaskCompleted(List<Comic> comics);
-    }
-
-    public String transformSpaces (String searchQuery){
-        // Comprobar si la cadena contiene espacios
-        if (searchQuery.contains(" ")) {
-            // Si contiene espacios, reemplazarlos por %20
-            return searchQuery.replaceAll(" ", "%20");
-        } else {
-            // Si no contiene espacios, devolver la cadena original
-            return searchQuery;
-        }
     }
 }
 

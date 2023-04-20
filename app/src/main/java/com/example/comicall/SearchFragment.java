@@ -41,8 +41,6 @@ public class SearchFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    RadioGroup radioGroup;
-
     private ComicLoaderCallbacks comicLoaderCallbacks;
     private ComicAdapter comicAdapter;
     private RecyclerView recyclerView;
@@ -51,7 +49,7 @@ public class SearchFragment extends Fragment {
     private List<Comic> comicList = new ArrayList<>();
 
     public SearchFragment() {
-        // Required empty public constructor
+
     }
 
     public static SearchFragment newInstance(String param1, String param2) {
@@ -110,9 +108,6 @@ public class SearchFragment extends Fragment {
             public void onGlobalLayout() {
                 SearchView searchView = view.findViewById(R.id.searchView);
 
-                radioGroup = view.findViewById(R.id.SearchRadioGroup);
-
-
                 Button searchButton = view.findViewById(R.id.SearchButton);
                 searchButton.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -128,26 +123,8 @@ public class SearchFragment extends Fragment {
             }
         });
     }
-    /*
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
 
-        SearchView searchView = view.findViewById(R.id.searchView);
 
-        RadioGroup radioGroup = view.findViewById(R.id.SearchRadioGroup);
-        int selected = radioGroup.getCheckedRadioButtonId();
-
-        Button searchButton = view.findViewById(R.id.SearchButton);
-        searchButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                setProgressBarVisibility(View.VISIBLE);
-                searchComics(selected, searchView.getQuery().toString());
-            }
-        });
-    }
-*/
     public void searchComics (String searchText){
 
         ConnectivityManager connectivityManager = (ConnectivityManager) getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -160,18 +137,8 @@ public class SearchFragment extends Fragment {
         comicAdapter.notifyDataSetChanged();
 
 
-        int selected = radioGroup.getCheckedRadioButtonId();
-
-        String searchType = "-1";
-        if(selected == R.id.TituloRadioButton){
-            searchType = "titulo";
-        }else if(selected == R.id.PersonajeRadioButton){
-            searchType = "personaje";
-        }
-
         Bundle queryBundle = new Bundle();
         queryBundle.putString(ComicLoaderCallbacks.SEARCH_QUERY, searchText);
-        queryBundle.putString(ComicLoaderCallbacks.SEARCH_TYPE, searchType);
         LoaderManager.getInstance(this)
                 .restartLoader(0, queryBundle, comicLoaderCallbacks);
     }

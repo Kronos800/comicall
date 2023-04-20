@@ -27,7 +27,7 @@ public class ComicLoaderCallbacks implements LoaderManager.LoaderCallbacks<List<
     @NonNull
     @Override
     public Loader<List<Comic>> onCreateLoader(int id, @Nullable Bundle args) {
-        return new ComicLoader(searchFragment.requireContext(), args.getString(SEARCH_QUERY), args.getString(SEARCH_TYPE));
+        return new ComicLoader(searchFragment.requireContext(), args.getString(SEARCH_QUERY));
     }
 
     @Override
