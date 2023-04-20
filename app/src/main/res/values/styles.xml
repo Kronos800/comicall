@@ -4,4 +4,5 @@
         <item name="boxStrokeColor">@color/text_input_box_stroke_color</item>
         <item name="boxStrokeWidth">1.5dp</item>
     </style>
+
 </resources>
