@@ -1,12 +1,29 @@
 package com.example.comicall;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.loader.app.LoaderManager;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ProgressBar;
+import android.widget.RadioGroup;
+import android.widget.SearchView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -20,23 +37,21 @@ public class SearchFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
+
     private String mParam1;
     private String mParam2;
 
+    private ComicLoaderCallbacks comicLoaderCallbacks;
+    private ComicAdapter comicAdapter;
+    private RecyclerView recyclerView;
+    private ProgressBar progressBar;
+
+    private List<Comic> comicList = new ArrayList<>();
+
     public SearchFragment() {
-        // Required empty public constructor
+
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment ThirdFragment.
-     */
-    // TODO: Rename and change types and number of parameters
     public static SearchFragment newInstance(String param1, String param2) {
         SearchFragment fragment = new SearchFragment();
         Bundle args = new Bundle();
@@ -49,16 +64,95 @@ public class SearchFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+        comicAdapter = new ComicAdapter(getContext(), new ArrayList<>());
+        comicLoaderCallbacks = new ComicLoaderCallbacks(this);
+        LoaderManager loaderManager = LoaderManager.getInstance(this);
+        if(loaderManager.getLoader(0) != null){
+            loaderManager.initLoader(0,null, comicLoaderCallbacks);
+        }
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_search, container, false);
+
+        View view = inflater.inflate(R.layout.fragment_search, container, false);
+
+
+        recyclerView = view.findViewById(R.id.recyclerView);
+        recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 3));
+        recyclerView.setAdapter(comicAdapter);
+
+        progressBar = view.findViewById(R.id.progressBar);
+        progressBar.setVisibility(View.GONE);
+
+
+        return view;
+    }
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        // Obtener la vista raíz del Fragment
+        View rootView = view.getRootView();
+
+        // Registrar un OnGlobalLayoutListener en la vista raíz
+        rootView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                SearchView searchView = view.findViewById(R.id.searchView);
+
+                Button searchButton = view.findViewById(R.id.SearchButton);
+                searchButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        setProgressBarVisibility(View.VISIBLE);
+                        searchComics(searchView.getQuery().toString());
+                    }
+                });
+
+
+                // Remover el OnGlobalLayoutListener después de que se haya ejecutado
+                rootView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+            }
+        });
+    }
+
+
+    public void searchComics (String searchText){
+
+        ConnectivityManager connectivityManager = (ConnectivityManager) getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+        if(!networkInfo.isConnected() || networkInfo == null){
+            return;
+        }
+
+        comicAdapter.cleanList();
+        comicAdapter.notifyDataSetChanged();
+
+
+        Bundle queryBundle = new Bundle();
+        queryBundle.putString(ComicLoaderCallbacks.SEARCH_QUERY, searchText);
+        LoaderManager.getInstance(this)
+                .restartLoader(0, queryBundle, comicLoaderCallbacks);
+    }
+
+    public void updateComicsResultList(List<Comic> comics){
+
+        if(comics == null || comics.isEmpty()){
+            return;
+        }
+        comicAdapter.setComicsData(comics);
+        comicAdapter.notifyDataSetChanged();
+    }
+
+    public void setProgressBarVisibility(int visibility){
+        this.progressBar.setVisibility(visibility);
     }
 }

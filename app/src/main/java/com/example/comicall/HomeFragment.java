@@ -95,12 +95,13 @@ public class HomeFragment extends Fragment implements ComicLoader.OnTaskComplete
         comicAdapter = new ComicAdapter(getContext(), comicList);
         recyclerView.setAdapter(comicAdapter);
     }
+    /*
     @Override
     public void onResume() {
         super.onResume();
         new ComicLoader(getContext(), this).execute();
     }
-
+    */
     public void setProgressBarVisibility(int visibility){
         this.progressBar.setVisibility(visibility);
     }
