@@ -11,6 +11,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -25,6 +27,15 @@ public class ProfileFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+
+    private ImageView imagenPerfil;
+    private TextView nombreUsuario;
+    private TextView correoUsuario;
+
+    private Button guardarbutton;
+    private Button cerrarSesionButton;
+
+    private FirebaseAuth mAuth;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -71,9 +82,12 @@ public class ProfileFragment extends Fragment {
     }
 
     private void setup(View view){
-        Button guardar = view.findViewById(R.id.saveButton);
-
-        guardar.setOnClickListener(new View.OnClickListener() {
+        guardarbutton = view.findViewById(R.id.saveButton);
+        imagenPerfil = view.findViewById(R.id.profile_image);
+        nombreUsuario = view.findViewById(R.id.profile_username);
+        correoUsuario = view.findViewById(R.id.profile_email);
+        cerrarSesionButton = view.findViewById(R.id.signoutbutton);
+        guardarbutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 FirebaseAuth.getInstance().signOut();

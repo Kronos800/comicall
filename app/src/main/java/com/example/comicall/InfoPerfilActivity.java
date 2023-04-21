@@ -26,8 +26,7 @@ public class InfoPerfilActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vista_perfil);
 
-        //mAuth = FirebaseAuth.getInstance();
-
+        mAuth = FirebaseAuth.getInstance();
         imagenPerfil = findViewById(R.id.profile_image);
         nombreUsuario = findViewById(R.id.profile_username);
         correoUsuario = findViewById(R.id.profile_email);
