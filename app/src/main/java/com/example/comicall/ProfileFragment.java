@@ -1,5 +1,7 @@
 package com.example.comicall;
 
+import static android.content.ContentValues.TAG;
+
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -22,6 +24,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
@@ -34,6 +38,8 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -57,6 +63,8 @@ public class ProfileFragment extends Fragment {
     private Button borrarCuentaButton;
 
     private FirebaseAuth mAuth;
+
+    FirebaseUser currentUser;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -103,32 +111,10 @@ public class ProfileFragment extends Fragment {
     }
 
     private void setup(View view){
-       /* FirebaseAuth mAuth = FirebaseAuth.getInstance();
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        guardarbutton = view.findViewById(R.id.saveButton);
-        imagenPerfil = view.findViewById(R.id.profile_image);
-        nombreUsuario = view.findViewById(R.id.profile_username);
-        correoUsuario = view.findViewById(R.id.profile_email);
-        cerrarSesionButton = view.findViewById(R.id.signoutbutton);
-        // Obtener una referencia a la base de datos
-        //DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("users/" + currentUser.getUid());
-        nombreUsuario.setText(currentUser.getUid());
-        /*guardarbutton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // Obtener el valor actual del EditText que contiene el nombre de usuario
-                String nuevoNombreUsuario = nombreUsuario.getText().toString().trim();
 
-                // Actualizar el valor del nombre de usuario en la base de datos
-                userRef.child("username").setValue(nuevoNombreUsuario);
-
-                // Mostrar un mensaje de éxito
-                Toast.makeText(getActivity(), "Nombre de usuario actualizado", Toast.LENGTH_SHORT).show();
-            }
-        });*/
 
         mAuth = FirebaseAuth.getInstance();
-        FirebaseUser currentUser = mAuth.getCurrentUser();
+        currentUser = mAuth.getCurrentUser();
 
         guardarbutton = view.findViewById(R.id.saveButton);
         imagenPerfil = view.findViewById(R.id.profile_image);
@@ -136,10 +122,6 @@ public class ProfileFragment extends Fragment {
         correoUsuario = view.findViewById(R.id.profile_email);
         cerrarSesionButton = view.findViewById(R.id.signoutbutton);
         borrarCuentaButton = view.findViewById(R.id.deleteAccountButton);
-
-        // Obtener una referencia a la base de datos
-        //DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("users/" + currentUser.getUid());
-        //DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("users");
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         String correoUsuariokey = currentUser.getEmail();
@@ -153,59 +135,26 @@ public class ProfileFragment extends Fragment {
                 }
             }
         });
-
-        // Mostrar la información del usuario actual
-        //nombreUsuario.setText(currentUser.getDisplayName());
         correoUsuario.setText(currentUser.getEmail());
 
-
         DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("users/" + currentUser.getUid());
-
+        String email = currentUser.getEmail();
 
         // Actualizar el nombre de usuario en la base de datos al presionar el botón de guardar
         guardarbutton.setOnClickListener(new View.OnClickListener() {
-            //NO FUNCIONA TODAVIA
             @Override
             public void onClick(View view) {
+                // hashmap clave valor de los datos a introducir
+                HashMap<String,String> username = new HashMap<>();
 
-                // Actualizar el campo "nombre" del usuario
-                userRefd.update("nombre", "Pepe")
-                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
-                                Toast.makeText(getActivity(), "Usuario modificado exitosamente", Toast.LENGTH_SHORT).show();
-                            }
-                        })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Toast.makeText(getActivity(), "Error al actualizar el nombre del usuario", Toast.LENGTH_SHORT).show();
-                            }
-                        });
+                //añade al hashmap
+                username.put("username",nombreUsuario.getText().toString());
+                // si no existe la coleccion la crea y si existe añade los valores del set
+                // Tambien sirve para actualizar datos
 
+                db.collection("users").document(currentUser.getEmail()).set(username);
+                Toast.makeText(getActivity(), "Nombre de usuario actualizado", Toast.LENGTH_SHORT).show();
 
-
-
-
-
-
-
-/*
-                // Obtener el valor actual del EditText que contiene el nombre de usuario
-                String nuevoNombreUsuario = nombreUsuario.getText().toString().trim();
-
-                // Actualizar el valor del nombre de usuario en la base de datos
-                userRef.child("username").setValue(nuevoNombreUsuario);
-
-                // Actualizar el nombre de usuario en el perfil del usuario
-                //FirebaseUser currentUser = mAuth.getCurrentUser();
-                UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-                        .setDisplayName(nuevoNombreUsuario)
-                        .build();
-                currentUser.updateProfile(profileUpdates);
-
-                // Mostrar un mensaje de éxito
-                Toast.makeText(getActivity(), "Nombre de usuario actualizado", Toast.LENGTH_SHORT).show();*/
             }
         });
 
@@ -221,26 +170,10 @@ public class ProfileFragment extends Fragment {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         // Borrar la cuenta del usuario
-                        FirebaseUser currentUser = mAuth.getCurrentUser();
-                        currentUser.delete()
-                                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<Void> task) {
-                                        if (task.isSuccessful()) {
-                                            // Borrar la información del usuario de la base de datos
-                                            userRef.removeValue();
-                                            // Mostrar un mensaje de éxito
-                                            Toast.makeText(getActivity(), "Cuenta borrada exitosamente", Toast.LENGTH_SHORT).show();
-                                            // Regresar a la pantalla de login
-                                            Intent loginIntent = new Intent(getActivity(), LoginActivity.class);
-                                            startActivity(loginIntent);
-                                            getActivity().finish();
-                                        } else {
-                                            // Mostrar un mensaje de error
-                                            Toast.makeText(getActivity(), "Error al borrar la cuenta", Toast.LENGTH_SHORT).show();
-                                        }
-                                    }
-                                });
+                        String email = currentUser.getEmail();
+
+                        Intent intent = new Intent(getActivity(), LoginDeleteActivity.class);
+                        startActivity(intent);
                     }
                 });
                 builder.setNegativeButton("Cancelar", null);
