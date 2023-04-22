@@ -1,18 +1,45 @@
 package com.example.comicall;
 
+import static android.content.ContentValues.TAG;
+
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -25,6 +52,19 @@ public class ProfileFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+
+    private ImageView imagenPerfil;
+    private TextView nombreUsuario;
+    private TextView correoUsuario;
+
+    private Button guardarbutton;
+    private Button cerrarSesionButton;
+
+    private Button borrarCuentaButton;
+
+    private FirebaseAuth mAuth;
+
+    FirebaseUser currentUser;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -71,9 +111,79 @@ public class ProfileFragment extends Fragment {
     }
 
     private void setup(View view){
-        Button guardar = view.findViewById(R.id.saveButton);
 
-        guardar.setOnClickListener(new View.OnClickListener() {
+
+        mAuth = FirebaseAuth.getInstance();
+        currentUser = mAuth.getCurrentUser();
+
+        guardarbutton = view.findViewById(R.id.saveButton);
+        imagenPerfil = view.findViewById(R.id.profile_image);
+        nombreUsuario = view.findViewById(R.id.profile_username);
+        correoUsuario = view.findViewById(R.id.profile_email);
+        cerrarSesionButton = view.findViewById(R.id.signoutbutton);
+        borrarCuentaButton = view.findViewById(R.id.deleteAccountButton);
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        String correoUsuariokey = currentUser.getEmail();
+        DocumentReference userRefd = db.collection("users").document(correoUsuariokey);
+        userRefd.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                DocumentSnapshot document = task.getResult();
+                if (document.exists()) {
+                    String nombreUsuariostring = document.getString("username"); // Reemplaza con el nombre del campo que contiene el nombre de usuario
+                    nombreUsuario.setText(nombreUsuariostring);
+                }
+            }
+        });
+        correoUsuario.setText(currentUser.getEmail());
+
+        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("users/" + currentUser.getUid());
+        String email = currentUser.getEmail();
+
+        // Actualizar el nombre de usuario en la base de datos al presionar el botón de guardar
+        guardarbutton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // hashmap clave valor de los datos a introducir
+                HashMap<String,String> username = new HashMap<>();
+
+                //añade al hashmap
+                username.put("username",nombreUsuario.getText().toString());
+                // si no existe la coleccion la crea y si existe añade los valores del set
+                // Tambien sirve para actualizar datos
+
+                db.collection("users").document(currentUser.getEmail()).set(username);
+                Toast.makeText(getActivity(), "Nombre de usuario actualizado", Toast.LENGTH_SHORT).show();
+
+            }
+        });
+
+        // Botón para borrar la cuenta del usuario
+        borrarCuentaButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Mostrar un diálogo de confirmación
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                builder.setTitle("¿Está seguro de que desea borrar su cuenta?");
+                builder.setMessage("Esta acción no se puede deshacer y se perderán todos los datos asociados con su cuenta.");
+                builder.setPositiveButton("Sí, borrar mi cuenta", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        // Borrar la cuenta del usuario
+                        String email = currentUser.getEmail();
+
+                        Intent intent = new Intent(getActivity(), LoginDeleteActivity.class);
+                        startActivity(intent);
+                    }
+                });
+                builder.setNegativeButton("Cancelar", null);
+                builder.show();
+            }
+        });
+
+
+        // Botón para cerrar sesión
+        cerrarSesionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 FirebaseAuth.getInstance().signOut();
