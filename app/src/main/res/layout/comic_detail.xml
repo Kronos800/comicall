@@ -11,13 +11,14 @@
         android:id="@+id/linearLayout2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:layout_marginEnd="6dp"
         android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout3"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.037">
+        tools:ignore="MissingConstraints">
 
         <androidx.cardview.widget.CardView
             android:id="@+id/comic_card"
@@ -33,37 +34,53 @@
                 android:id="@+id/comic_image"
                 android:layout_width="198dp"
                 android:layout_height="match_parent"
-                android:scaleType="centerCrop"
+                android:scaleType="fitStart"
                 android:src="@drawable/image_not_found" />
 
         </androidx.cardview.widget.CardView>
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
 
             <Space
                 android:layout_width="match_parent"
-                android:layout_height="50dp" />
+                android:layout_height="20dp" />
+
+            <RatingBar
+                android:id="@+id/ratingBarAverage"
+                style="?android:attr/ratingBarStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:numStars="5"
+                android:rating="0"
+                android:stepSize="0.5"
+                android:scaleX="2"
+                android:scaleY="2"
+                android:layout_gravity="center"
+                android:progressTint="@color/marvel_grey"/>
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="10dp" />
+
 
             <TextView
                 android:id="@+id/comic_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
-                android:maxLength="30"
-                android:maxLines="2"
                 android:padding="2dp"
-                android:text="Comic Title"
+                android:text="Comic title"
                 android:textAppearance="@style/TextAppearance.AppCompat.Title"
                 android:textColor="@android:color/white"
                 android:textSize="20dp"
-                android:textStyle="bold" />
+                android:textStyle="bold|italic" />
 
             <Space
                 android:layout_width="match_parent"
-                android:layout_height="20dp" />
+                android:layout_height="10dp" />
 
             <TextView
                 android:id="@+id/series_text"
@@ -76,28 +93,26 @@
                 android:text="Series:"
                 android:textAppearance="@style/TextAppearance.AppCompat.Title"
                 android:textColor="@android:color/white"
-                android:textSize="15dp"
-                android:textStyle="bold" />
+                android:textSize="15dp" />
 
             <TextView
                 android:id="@+id/comic_series"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
-                android:maxLength="30"
-                android:maxLines="2"
                 android:padding="2dp"
                 android:text="Series"
                 android:textAppearance="@style/TextAppearance.AppCompat.Title"
                 android:textColor="@android:color/white"
-                android:textSize="14dp" />
+                android:textSize="14dp"
+                android:textStyle="bold|italic"/>
 
             <Space
                 android:layout_width="match_parent"
-                android:layout_height="20dp" />
+                android:layout_height="10dp" />
 
             <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
@@ -111,31 +126,27 @@
                         android:layout_width="114dp"
                         android:layout_height="wrap_content"
                         android:ellipsize="end"
-                        android:maxLength="30"
-                        android:maxLines="2"
                         android:padding="2dp"
                         android:text="Writer:"
                         android:textAppearance="@style/TextAppearance.AppCompat.Title"
                         android:textColor="@android:color/white"
-                        android:textSize="15dp"
-                        android:textStyle="bold" />
+                        android:textSize="15dp"/>
 
                     <TextView
                         android:id="@+id/comic_writer"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:ellipsize="end"
-                        android:maxLength="30"
-                        android:maxLines="2"
                         android:padding="2dp"
                         android:text="Writer writer"
                         android:textAppearance="@style/TextAppearance.AppCompat.Title"
                         android:textColor="@android:color/white"
-                        android:textSize="14dp" />
+                        android:textSize="14dp"
+                        android:textStyle="bold|italic"/>
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_width="114dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
@@ -144,27 +155,23 @@
                         android:layout_width="114dp"
                         android:layout_height="wrap_content"
                         android:ellipsize="end"
-                        android:maxLength="30"
-                        android:maxLines="2"
                         android:padding="2dp"
                         android:text="Penciler:"
                         android:textAppearance="@style/TextAppearance.AppCompat.Title"
                         android:textColor="@android:color/white"
-                        android:textSize="15dp"
-                        android:textStyle="bold" />
+                        android:textSize="15dp" />
 
                     <TextView
                         android:id="@+id/comic_penciler"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:ellipsize="end"
-                        android:maxLength="30"
-                        android:maxLines="2"
                         android:padding="2dp"
                         android:text="Penciler penciler"
                         android:textAppearance="@style/TextAppearance.AppCompat.Title"
                         android:textColor="@android:color/white"
-                        android:textSize="14dp" />
+                        android:textSize="14dp"
+                        android:textStyle="bold|italic"/>
                 </LinearLayout>
 
             </LinearLayout>
@@ -180,10 +187,14 @@
         android:id="@+id/linearLayout3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="5dp"
         android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout4"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout2">
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout2"
+        >
 
         <TextView
             android:id="@+id/description_text"
@@ -197,12 +208,14 @@
             android:textAppearance="@style/TextAppearance.AppCompat.Title"
             android:textColor="@android:color/white"
             android:textSize="15dp"
-            app:layout_constrantEnd_toEndOf="parent" />
+            android:layout_marginLeft="20dp"/>
 
         <TextView
             android:id="@+id/comic_description"
-            android:layout_width="374dp"
-            android:layout_height="92dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
             android:ellipsize="end"
             android:maxLines="10"
             android:padding="2dp"
@@ -211,19 +224,45 @@
             android:textAppearance="@style/TextAppearance.AppCompat.Title"
             android:textColor="@android:color/white"
             android:textSize="15dp"
-            app:layout_constrantEnd_toEndOf="parent" />
+            android:textStyle="bold|italic" />
 
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/linearLayout4"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="10dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout3">
+
+        <TextView
+            android:id="@+id/rating_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:ellipsize="end"
+            android:maxLength="30"
+            android:maxLines="2"
+            android:padding="2dp"
+            android:text="Rate the comic:"
+            android:textAppearance="@style/TextAppearance.AppCompat.Title"
+            android:textColor="@android:color/white"
+            android:textSize="15dp" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="10dp" />
+
+        <RatingBar
+            android:id="@+id/ratingBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:progressTint="@color/marvel_grey"/>
 
         <Space
             android:layout_width="match_parent"
@@ -233,19 +272,34 @@
             android:id="@+id/comments_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
             android:ellipsize="end"
             android:maxLines="10"
             android:padding="2dp"
             android:singleLine="false"
-            android:text="comments:"
+            android:text="Comments:"
             android:textAppearance="@style/TextAppearance.AppCompat.Title"
             android:textColor="@android:color/white"
-            android:textSize="15dp"
-            app:layout_constrantEnd_toEndOf="parent" />
+            android:textSize="15dp" />
 
         <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/comments_recycler"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:layout_marginLeft="20dp">
+
+        </androidx.recyclerview.widget.RecyclerView>
+
     </LinearLayout>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/comment_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:src="@drawable/comments_icon"
+        app:backgroundTint="@color/marvel_red"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

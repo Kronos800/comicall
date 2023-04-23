@@ -6,29 +6,31 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Comic {
+public class Comic implements Serializable {
 
     private int id;
     private String title;
     private String description;
-    private URL marvel_url;
+    private String marvel_url;
     private String series_name;
     private String saleDate;
     private float price;
     private String image;
     private List<Creator> creators;
     private List<String> characters;
-    private int valoration;
+
+    private int rating;
     private List<Comment> comments;
 
 
-    public Comic(int id, String title, String description, URL marvel_url, String series_name, String saleDate,
-                 float price, String image, List<Creator> creators, List<String> characters, int valoration, List<Comment> comments) {
+    public Comic(int id, String title, String description, String marvel_url, String series_name, String saleDate,
+                 float price, String image, List<Creator> creators, List<String> characters, int rating, List<Comment> comments) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -39,7 +41,7 @@ public class Comic {
         this.image = image;
         this.creators = creators;
         this.characters = characters;
-        this.valoration = valoration;
+        this.rating = rating;
         this.comments = comments;
     }
 
@@ -104,7 +106,7 @@ public class Comic {
 
             List<Comment> comments = new ArrayList<>();
 
-            Comic comic = new Comic(id, title, description, url_marvel, series_name, saleDate,
+            Comic comic = new Comic(id, title, description, url_marvel.toString(), series_name, saleDate,
                     price, image+".jpg", creators_list, characters_list, 5, comments);
             comicList.add(comic);
         }
@@ -118,7 +120,28 @@ public class Comic {
         return title;
     }
     public String getDescription() {
+        if(description.equals("null") || description.isEmpty() || description.equals("#N/A"))
+            return "No description";
         return description;
     }
     public String getThumbnailUrl(){return image;}
+
+    public String getSeries() { return series_name;
+    }
+
+    public String getWriterName() {
+        for(Creator creator: creators){
+            if(creator.getRole().equals("writer"))
+                return creator.getName();
+        }
+        return "No writer credits";
+    }
+
+    public String getPencilerName() {
+        for(Creator creator: creators){
+            if(creator.getRole().equals("penciler (cover)"))
+                return creator.getName();
+        }
+        return "No penciler credits";
+    }
 }

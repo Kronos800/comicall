@@ -46,6 +46,7 @@ public class HomeFragment extends Fragment implements ComicsUpdateListener{
     private ComicLoaderCallbacks comicLoaderCallbacks;
     private RecyclerView recyclerView;
     private ComicAdapter comicAdapter;
+
     private List<Comic> comicList = new ArrayList<>();
 
     private ProgressBar progressBar;
@@ -99,8 +100,8 @@ public class HomeFragment extends Fragment implements ComicsUpdateListener{
         recyclerView = view.findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 3));
         recyclerView.setAdapter(comicAdapter);
-
-        this.setProgressBarVisibility(View.GONE);
+        progressBar = view.findViewById(R.id.progress_bar);
+        this.setProgressBarVisibility(View.VISIBLE);
 
         searchComics("");
 
