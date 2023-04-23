@@ -1,4 +1,4 @@
-package com.example.comicall;
+package com.example.comicall.comic;
 
 import java.util.List;
 

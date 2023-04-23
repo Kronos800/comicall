@@ -1,6 +1,6 @@
-package com.example.comicall;
+package com.example.comicall.comic;
 
-import android.util.Log;
+import com.example.comicall.comment.Comment;
 
 import org.json.JSONArray;
 import org.json.JSONException;

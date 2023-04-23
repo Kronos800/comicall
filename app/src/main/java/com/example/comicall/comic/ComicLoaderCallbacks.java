@@ -1,6 +1,4 @@
-package com.example.comicall;
-
-import static java.security.AccessController.getContext;
+package com.example.comicall.comic;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -14,7 +12,8 @@ import androidx.loader.content.Loader;
 
 import java.util.List;
 
-import com.example.comicall.ComicsUpdateListener;
+import com.example.comicall.fragments.HomeFragment;
+import com.example.comicall.fragments.SearchFragment;
 
 public class ComicLoaderCallbacks implements LoaderManager.LoaderCallbacks<List<Comic>>{
 

@@ -16,11 +16,12 @@
         android:icon="@drawable/search_icon"
         android:title="@null"
         app:iconTint="@drawable/navbar_item_selector"/>
-    <item
+
+    <!--<item
         android:id="@+id/notificationsFragment"
         android:icon="@drawable/notifications_icon"
         android:title="@null"
-        app:iconTint="@drawable/navbar_item_selector"/>
+        app:iconTint="@drawable/navbar_item_selector"/>-->
     <item
         android:id="@+id/profileFragment"
         android:icon="@drawable/profile_icon"

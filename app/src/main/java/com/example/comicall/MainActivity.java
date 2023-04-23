@@ -10,6 +10,11 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
 
+import com.example.comicall.fragments.FavoritesFragment;
+import com.example.comicall.fragments.HomeFragment;
+import com.example.comicall.fragments.NotificationsFragment;
+import com.example.comicall.fragments.ProfileFragment;
+import com.example.comicall.fragments.SearchFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {
@@ -49,9 +54,9 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.searchFragment:
                     loadFragment(searchFragment);
                     return true;
-                case R.id.notificationsFragment:
+                /*case R.id.notificationsFragment:
                     loadFragment(notificationsFragment);
-                    return true;
+                    return true;*/
                 case R.id.profileFragment:
                     loadFragment(profileFragment);
                     return true;

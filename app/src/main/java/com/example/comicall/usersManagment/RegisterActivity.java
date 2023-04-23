@@ -1,4 +1,4 @@
-package com.example.comicall;
+package com.example.comicall.usersManagment;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -15,6 +15,8 @@ import android.widget.EditText;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.comicall.MainActivity;
+import com.example.comicall.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputLayout;
@@ -112,7 +114,7 @@ public class RegisterActivity  extends AppCompatActivity {
         dialog.show();
     }
     private void showHome(String email){
-        Intent homeIntent = new Intent(this,MainActivity.class);
+        Intent homeIntent = new Intent(this, MainActivity.class);
         homeIntent.putExtra("email",email);
         startActivity(homeIntent);
     }

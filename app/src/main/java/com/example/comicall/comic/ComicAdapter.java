@@ -1,4 +1,4 @@
-package com.example.comicall;
+package com.example.comicall.comic;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,7 +14,7 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.target.Target;
+import com.example.comicall.R;
 
 import java.net.MalformedURLException;
 import java.net.URL;

@@ -1,4 +1,4 @@
-package com.example.comicall;
+package com.example.comicall.usersManagment;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.comicall.R;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class InfoPerfilActivity extends AppCompatActivity {

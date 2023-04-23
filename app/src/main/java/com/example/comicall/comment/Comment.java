@@ -1,4 +1,4 @@
-package com.example.comicall;
+package com.example.comicall.comment;
 
 import com.google.firebase.firestore.ServerTimestamp;
 
