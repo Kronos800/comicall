@@ -23,6 +23,9 @@
             android:name=".ComicDetailActivity"
             android:exported="false" />
         <activity
+            android:name=".LoginDeleteActivity"
+            android:exported="false" />  
+        <activity
             android:name=".LoginActivity"
             android:exported="true">
             <intent-filter>

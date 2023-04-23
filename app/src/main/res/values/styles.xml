@@ -9,4 +9,5 @@
         <item name="android:textColorHint">@android:color/black</item>
         <item name="searchIcon">@drawable/search_icon</item>
     </style>
+
 </resources>
