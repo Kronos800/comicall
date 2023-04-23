@@ -27,6 +27,8 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.ViewHo
 
     private boolean mIsLoading = true;
 
+    private boolean justAdded;
+
     public CommentsAdapter(Context context, List<Comment> comments) {
         mContext = context;
         mComments = comments;
@@ -44,27 +46,25 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.ViewHo
 
         Comment comment = mComments.get(position);
 
-        // Setea el texto del comentario en el TextView correspondiente
+        // Setea el texto del comentario
         holder.commentText.setText(comment.getComment());
 
-        // Setea el nombre del usuario que hizo el comentario en el TextView correspondiente
+        // Setea el nombre del usuario que hizo el comentario
         holder.userName.setText(comment.getUsername());
 
-        // Setea la fecha en la que se hizo el comentario en el TextView correspondiente
-
-        Long createdAt = comment.getTimestamp() != null ? comment.getTimestamp().getTime() / 1000L : null;
-        String timeAgo = null;
-        if (createdAt != null) {
-            int createdAtInt = createdAt.intValue();
-            timeAgo = comment.getTimeAgo(createdAtInt);
+        // Setea la fecha en la que se hizo el comentario
+        if(!comment.getJustAdded()) {
+            Long createdAt = comment.getTimestamp() != null ? comment.getTimestamp().getTime() / 1000L : null;
+            String timeAgo = null;
+            if (createdAt != null) {
+                int createdAtInt = createdAt.intValue();
+                timeAgo = comment.getTimeAgo(createdAtInt);
+            }
+            holder.timeAgo.setText(timeAgo);
+        } else {
+            comment.setJustAdded(false);
+            holder.timeAgo.setText("Just now");
         }
-        holder.timeAgo.setText(timeAgo);
-
-        /*// Carga la imagen del usuario que hizo el comentario en el ImageView correspondiente
-        Glide.with(mContext)
-                .load(comment.getUserImageURL())
-                .override(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
-                .into(holder.userImage);*/
 
     }
 

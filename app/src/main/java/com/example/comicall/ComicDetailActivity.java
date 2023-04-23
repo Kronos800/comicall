@@ -78,27 +78,7 @@ public class ComicDetailActivity extends AppCompatActivity {
             Glide.with(this).load(urlImage).into(imageView);
         }
 
-        CollectionReference collection = db.collection("ratings");
-        DocumentReference docRef = collection.document(Integer.toString(comic.getId()));
-
-        // COMPRUEBA Y AÑADE LA MEDIA DEL COMIC
-        RatingBar ratingAverage = findViewById(R.id.ratingBarAverage);
-        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
-                        if (document.contains("avg")) {
-                            double avg = document.getDouble("avg");
-                            ratingAverage.setRating((float) avg);
-                        } else {
-                        }
-                    } else {
-                    }
-                }
-            }
-        });
+        updateComicAverage();
 
         TextView title = findViewById(R.id.comic_title);
         title.setText(comic.getTitle());
@@ -155,7 +135,7 @@ public class ComicDetailActivity extends AppCompatActivity {
                                 userRate.put("rate", rating);
                                 docRef.collection("userRatings").document(userEmail).set(userRate);
 
-
+                                updateComicAverage();
                             }
                         } else {
                             // Error al obtener el documento
@@ -226,6 +206,29 @@ public class ComicDetailActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void updateComicAverage(){
+        CollectionReference collection = db.collection("ratings");
+        DocumentReference docRef = collection.document(Integer.toString(comic.getId()));
+        // COMPRUEBA Y AÑADE LA MEDIA DEL COMIC
+        RatingBar ratingAverage = findViewById(R.id.ratingBarAverage);
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        if (document.contains("avg")) {
+                            double avg = document.getDouble("avg");
+                            ratingAverage.setRating((float) avg);
+                        } else {
+                        }
+                    } else {
+                    }
+                }
+            }
+        });
     }
 
     private void setNewUsersRateCallback(float rating) {
@@ -352,6 +355,7 @@ public class ComicDetailActivity extends AppCompatActivity {
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
+                        updateComicAverage();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -467,6 +471,8 @@ public class ComicDetailActivity extends AppCompatActivity {
         userRate.put("rate", rating);
         docRef.collection("userRatings").document(userEmail).set(userRate);
 
+        updateComicAverage();
+
     }
 
     private void addCommentCallBack(String comment, String username){
@@ -476,10 +482,60 @@ public class ComicDetailActivity extends AppCompatActivity {
 
         CollectionReference usersCollection = docRef.collection("comic_comments");
 
-        Comment newComment = new Comment(username, comment, null);
-        usersCollection.add(newComment);
+        Comment newComment = new Comment(username, comment, null, false);
+        usersCollection.add(newComment)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
 
+                        showCommentsListJustAdded(documentReference.getId());
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        // Ocurrió un error al añadir el comentario a la colección.
+                    }
+                });
 
+    }
+
+    private void showCommentsListJustAdded(String justAddedId){
+        CollectionReference collection = db.collection("comments");
+        DocumentReference docRef = collection.document(Integer.toString(comic.getId()));
+
+        CollectionReference usersCollection = docRef.collection("comic_comments");
+
+        usersCollection.orderBy("timestamp", Query.Direction.DESCENDING).get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                List<Comment> comments = new ArrayList<>();
+
+                for (QueryDocumentSnapshot document : task.getResult()) {
+
+                    if(document.getId() == justAddedId) {
+                        String username = document.getString("username");
+                        String comment = document.getString("comment");
+                        Date timestamp = document.getDate("timestamp");
+                        Comment comment_for_list = new Comment(username, comment, timestamp, true);
+                        comments.add(comment_for_list);
+                    } else{
+                        String username = document.getString("username");
+                        String comment = document.getString("comment");
+                        Date timestamp = document.getDate("timestamp");
+                        Comment comment_for_list = new Comment(username, comment, timestamp, false);
+                        comments.add(comment_for_list);
+                    }
+
+                }
+                commentsAdapter = new CommentsAdapter(this,comments );
+                LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+                recyclerView = findViewById(R.id.comments_recycler);
+                recyclerView.setLayoutManager(linearLayoutManager);
+                recyclerView.setAdapter(commentsAdapter);
+            } else {
+                Log.w(TAG, "Error getting documents.", task.getException());
+            }
+        });
     }
 
     private void showCommentsList(){
@@ -491,12 +547,15 @@ public class ComicDetailActivity extends AppCompatActivity {
         usersCollection.orderBy("timestamp", Query.Direction.DESCENDING).get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 List<Comment> comments = new ArrayList<>();
+
                 for (QueryDocumentSnapshot document : task.getResult()) {
                     String username = document.getString("username");
                     String comment = document.getString("comment");
                     Date timestamp = document.getDate("timestamp");
-                    Comment comment_for_list = new Comment(username, comment, timestamp);
+                    Comment comment_for_list = new Comment(username, comment, timestamp,false);
                     comments.add(comment_for_list);
+
+
                 }
                 commentsAdapter = new CommentsAdapter(this,comments );
                 LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);

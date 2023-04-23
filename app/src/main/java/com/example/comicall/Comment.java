@@ -9,6 +9,7 @@ import java.util.concurrent.TimeUnit;
 public class Comment implements Serializable {
     private String username;
     private String comment;
+    private boolean justAdded;
     @ServerTimestamp
     private Date timestamp;
 
@@ -17,10 +18,11 @@ public class Comment implements Serializable {
     private static final int HOUR_MILLIS = 60 * MINUTE_MILLIS;
     private static final int DAY_MILLIS = 24 * HOUR_MILLIS;
 
-    public Comment(String username, String comment, Date timestamp){
+    public Comment(String username, String comment, Date timestamp,boolean justAdded){
         this.username = username;
         this.comment = comment;
         this.timestamp = timestamp;
+        this.justAdded = justAdded;
     }
 
     public String getComment(){ return comment; }
@@ -28,6 +30,10 @@ public class Comment implements Serializable {
         return username;
     }
     public Date getTimestamp(){ return timestamp; }
+    public boolean getJustAdded(){return justAdded;}
+    public void setJustAdded(boolean justAddedNew){
+        this.justAdded = justAddedNew;
+    }
     public String getTimeAgo(long time) {
         long now = TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis());
 
