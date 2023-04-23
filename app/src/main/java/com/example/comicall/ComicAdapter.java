@@ -1,5 +1,7 @@
 package com.example.comicall;
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -64,6 +66,21 @@ public class ComicAdapter extends RecyclerView.Adapter<ComicAdapter.ViewHolder> 
             }
         }
         holder.mTextView.setText(comic.getTitle());
+
+        holder.mCardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Aquí es donde puedes lanzar la nueva actividad
+                // por ejemplo:
+                Intent intent = new Intent(mContext, ComicDetailActivity.class);
+
+                Bundle extras = new Bundle();
+                extras.putSerializable("comic", comic);
+
+                intent.putExtras(extras);
+                mContext.startActivity(intent);
+            }
+        });
     }
 
     @Override

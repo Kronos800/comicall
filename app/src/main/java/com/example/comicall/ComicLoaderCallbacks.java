@@ -8,32 +8,43 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 import androidx.loader.app.LoaderManager;
 import androidx.loader.content.Loader;
 
 import java.util.List;
 
+import com.example.comicall.ComicsUpdateListener;
+
 public class ComicLoaderCallbacks implements LoaderManager.LoaderCallbacks<List<Comic>>{
 
     public static final String SEARCH_QUERY = "queryString";
-    public static final String SEARCH_TYPE = "printType";
-    private SearchFragment searchFragment;
+    private Fragment fragment;
     private Context context;
+    private ComicsUpdateListener listener;
 
-    public ComicLoaderCallbacks(SearchFragment searchFragment){
-        this.searchFragment = searchFragment;
+
+    public ComicLoaderCallbacks(Fragment searchFragment, ComicsUpdateListener listener){
+        this.fragment = searchFragment;
         this.context = searchFragment.getContext();
+        this.listener = listener;
     }
     @NonNull
     @Override
     public Loader<List<Comic>> onCreateLoader(int id, @Nullable Bundle args) {
-        return new ComicLoader(searchFragment.requireContext(), args.getString(SEARCH_QUERY));
+        return new ComicLoader(context, args.getString(SEARCH_QUERY));
     }
 
     @Override
     public void onLoadFinished(@NonNull Loader<List<Comic>> loader, List<Comic> data) {
-        searchFragment.updateComicsResultList((data));
-        searchFragment.setProgressBarVisibility(View.GONE);
+
+        if (listener instanceof HomeFragment) {
+            ((HomeFragment) listener).updateComicsResultList((data));
+            ((HomeFragment) listener).setProgressBarVisibility(View.GONE);
+        } else if (listener instanceof SearchFragment) {
+            ((SearchFragment) listener).updateComicsResultList(data);
+            ((SearchFragment) listener).setProgressBarVisibility(View.GONE);
+        }
     }
 
     @Override
