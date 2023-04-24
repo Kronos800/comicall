@@ -108,8 +108,6 @@ public class HomeFragment extends Fragment implements ComicsUpdateListener {
     }
 
 
-
-
     public void searchComics (String searchText){
 
         ConnectivityManager connectivityManager = (ConnectivityManager) getContext().getSystemService(Context.CONNECTIVITY_SERVICE);

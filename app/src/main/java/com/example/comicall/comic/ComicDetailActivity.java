@@ -6,6 +6,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
@@ -36,10 +37,13 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
+import org.w3c.dom.Document;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ComicDetailActivity extends AppCompatActivity {
 
@@ -142,6 +146,79 @@ public class ComicDetailActivity extends AppCompatActivity {
             }
         });
 
+        FloatingActionButton favsButton = findViewById(R.id.favs_button);
+
+        SharedPreferences preferences = getSharedPreferences("MY_APP_PREFERENCES", Context.MODE_PRIVATE);
+        String userEmail = preferences.getString("USER_EMAIL", "");
+
+        CollectionReference collection = db.collection("favorites");
+        DocumentReference favsUserDocRef = collection.document(userEmail);
+
+        CollectionReference comicsFavsCollection = favsUserDocRef.collection("comic_favs");
+        DocumentReference comicReference = comicsFavsCollection.document(Integer.toString(comic.getId()));
+
+        comicReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        favsButton.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.white)));
+                        favsButton.setImageTintList(ColorStateList.valueOf(getResources().getColor(R.color.marvel_red)));
+                    } else {
+
+                    }
+                }
+            }
+        });
+        favsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                SharedPreferences preferences = getSharedPreferences("MY_APP_PREFERENCES", Context.MODE_PRIVATE);
+                String userEmail = preferences.getString("USER_EMAIL", "");
+
+                CollectionReference collection = db.collection("favorites");
+                DocumentReference favsUserDocRef = collection.document(userEmail);
+
+                CollectionReference comicsFavsDocRef = favsUserDocRef.collection("comic_favs");
+                DocumentReference comicReference = comicsFavsDocRef.document(Integer.toString(comic.getId()));
+
+                comicReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            if (document.exists()) {
+                                comicsFavsDocRef.document(Integer.toString(comic.getId())).delete();
+                                favsButton.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.marvel_red)));
+                                favsButton.setImageTintList(ColorStateList.valueOf(getResources().getColor(R.color.marvel_grey)));
+                            } else {
+                                favsButton.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.white)));
+                                favsButton.setImageTintList(ColorStateList.valueOf(getResources().getColor(R.color.marvel_red)));
+                                Map<String, Object> comicMap = new HashMap<>();
+                                comicMap.put("id", comic.getId());
+                                comicMap.put("title", comic.getTitle());
+                                comicMap.put("description", comic.getDescription());
+                                comicMap.put("marvel_url", comic.getMarvel_url());
+                                comicMap.put("series_name", comic.getSeries_name());
+                                comicMap.put("saleDate", comic.getSaleDate());
+                                comicMap.put("price", comic.getPrice());
+                                comicMap.put("image", comic.getImage());
+                                comicMap.put("creators", comic.getCreators());
+                                comicMap.put("characters", comic.getCharacters());
+                                comicMap.put("rating", comic.getRating());
+                                comicMap.put("comments", comic.getComments());
+
+                                comicsFavsDocRef.document(Integer.toString(comic.getId())).set(comicMap);
+                            }
+                        }
+                    }
+                });
+            }
+
+        });
+
         FloatingActionButton commentButton = findViewById(R.id.comment_button);
         commentButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -204,7 +281,7 @@ public class ComicDetailActivity extends AppCompatActivity {
 
     }
 
-    private void updateComicAverage(){
+    private void updateComicAverage() {
         CollectionReference collection = db.collection("ratings");
         DocumentReference docRef = collection.document(Integer.toString(comic.getId()));
         // COMPRUEBA Y AÑADE LA MEDIA DEL COMIC
@@ -471,7 +548,7 @@ public class ComicDetailActivity extends AppCompatActivity {
 
     }
 
-    private void addCommentCallBack(String comment, String username){
+    private void addCommentCallBack(String comment, String username) {
 
         CollectionReference collection = db.collection("comments");
         DocumentReference docRef = collection.document(Integer.toString(comic.getId()));
@@ -496,7 +573,7 @@ public class ComicDetailActivity extends AppCompatActivity {
 
     }
 
-    private void showCommentsListJustAdded(String justAddedId){
+    private void showCommentsListJustAdded(String justAddedId) {
         CollectionReference collection = db.collection("comments");
         DocumentReference docRef = collection.document(Integer.toString(comic.getId()));
 
@@ -508,13 +585,13 @@ public class ComicDetailActivity extends AppCompatActivity {
 
                 for (QueryDocumentSnapshot document : task.getResult()) {
 
-                    if(document.getId() == justAddedId) {
+                    if (document.getId() == justAddedId) {
                         String username = document.getString("username");
                         String comment = document.getString("comment");
                         Date timestamp = document.getDate("timestamp");
                         Comment comment_for_list = new Comment(username, comment, timestamp, true);
                         comments.add(comment_for_list);
-                    } else{
+                    } else {
                         String username = document.getString("username");
                         String comment = document.getString("comment");
                         Date timestamp = document.getDate("timestamp");
@@ -523,7 +600,7 @@ public class ComicDetailActivity extends AppCompatActivity {
                     }
 
                 }
-                commentsAdapter = new CommentsAdapter(this,comments );
+                commentsAdapter = new CommentsAdapter(this, comments);
                 LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
                 recyclerView = findViewById(R.id.comments_recycler);
                 recyclerView.setLayoutManager(linearLayoutManager);
@@ -534,7 +611,7 @@ public class ComicDetailActivity extends AppCompatActivity {
         });
     }
 
-    private void showCommentsList(){
+    private void showCommentsList() {
         CollectionReference collection = db.collection("comments");
         DocumentReference docRef = collection.document(Integer.toString(comic.getId()));
 
@@ -548,12 +625,12 @@ public class ComicDetailActivity extends AppCompatActivity {
                     String username = document.getString("username");
                     String comment = document.getString("comment");
                     Date timestamp = document.getDate("timestamp");
-                    Comment comment_for_list = new Comment(username, comment, timestamp,false);
+                    Comment comment_for_list = new Comment(username, comment, timestamp, false);
                     comments.add(comment_for_list);
 
 
                 }
-                commentsAdapter = new CommentsAdapter(this,comments );
+                commentsAdapter = new CommentsAdapter(this, comments);
                 LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
                 recyclerView = findViewById(R.id.comments_recycler);
                 recyclerView.setLayoutManager(linearLayoutManager);

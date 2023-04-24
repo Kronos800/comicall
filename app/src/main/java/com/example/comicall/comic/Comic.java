@@ -144,4 +144,40 @@ public class Comic implements Serializable {
         }
         return "No penciler credits";
     }
+
+    public String getMarvel_url() {
+        return marvel_url;
+    }
+
+    public String getSeries_name() {
+        return series_name;
+    }
+
+    public String getSaleDate() {
+        return saleDate;
+    }
+
+    public float getPrice() {
+        return price;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public Object getCreators() {
+        return creators;
+    }
+
+    public Object getCharacters() {
+        return characters;
+    }
+
+    public Integer getRating() {
+        return new Integer(rating);
+    }
+
+    public Object getComments() {
+        return comments;
+    }
 }
