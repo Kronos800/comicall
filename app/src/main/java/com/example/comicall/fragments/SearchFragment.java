@@ -1,4 +1,4 @@
-package com.example.comicall;
+package com.example.comicall.fragments;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
@@ -17,10 +17,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ProgressBar;
-import android.widget.RadioGroup;
 import android.widget.SearchView;
+
+import com.example.comicall.R;
+import com.example.comicall.comic.Comic;
+import com.example.comicall.comic.ComicAdapter;
+import com.example.comicall.comic.ComicLoaderCallbacks;
+import com.example.comicall.comic.ComicsUpdateListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +34,7 @@ import java.util.List;
  * Use the {@link SearchFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class SearchFragment extends Fragment {
+public class SearchFragment extends Fragment implements ComicsUpdateListener {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -71,7 +75,7 @@ public class SearchFragment extends Fragment {
         }
 
         comicAdapter = new ComicAdapter(getContext(), new ArrayList<>());
-        comicLoaderCallbacks = new ComicLoaderCallbacks(this);
+        comicLoaderCallbacks = new ComicLoaderCallbacks(this,this);
         LoaderManager loaderManager = LoaderManager.getInstance(this);
         if(loaderManager.getLoader(0) != null){
             loaderManager.initLoader(0,null, comicLoaderCallbacks);

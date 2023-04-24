@@ -1,17 +1,12 @@
-package com.example.comicall;
+package com.example.comicall.comic;
 
 import android.content.Context;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.util.Log;
-import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.loader.content.AsyncTaskLoader;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -26,12 +21,10 @@ import java.util.List;
 public class ComicLoader extends AsyncTaskLoader<List<Comic>> implements Serializable {
 
     private static final String MARVEL_BASE_URL_COMICS = "https://gateway.marvel.com/v1/public/comics?";
-    private static final String MARVEL_BASE_URL_CHARACTER = "https://gateway.marvel.com/v1/public/characters?";
     private static final String TIME_STAMP = "ts";
 
     private static final String TITLE_STAMP = "title";
 
-    private static final String NAME_STAMP = "name";
     private static final String API_KEY = "apikey";
 
     private static final String HASH_MD5 = "hash";
@@ -54,28 +47,6 @@ public class ComicLoader extends AsyncTaskLoader<List<Comic>> implements Seriali
     public void onStartLoading(){
         forceLoad();
     }
-
-    /*
-    protected List<Comic> doInBackground(String... strings) {
-
-        // Build up the query URI, limiting results to 40 printed books.
-        Uri builtURI = Uri.parse(MARVEL_BASE_URL_COMICS).buildUpon()
-                .appendQueryParameter(DATE_DESCRIPTOR, "thisMonth")
-                .appendQueryParameter(TIME_STAMP, "1")
-                .appendQueryParameter(API_KEY, "f87fcb47ed4e50c7c9736f88c40518ca")
-                .appendQueryParameter(HASH_MD5, "6199108e5f83d03422c12931ed4b05eb")
-                .appendQueryParameter(LIMIT, "100")
-                .build();
-
-        String url = builtURI.toString();
-        try {
-            return downloadURL(url);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-    */
-
 
     private List<Comic> downloadURL(String myUrl) throws IOException {
         List<Comic> comics = new ArrayList<>();
@@ -123,18 +94,6 @@ public class ComicLoader extends AsyncTaskLoader<List<Comic>> implements Seriali
         return comics;
     }
 
-    protected void onPreExecute() {
-        //super.onPreExecute();
-        //((HomeFragment)listener).setProgressBarVisibility(View.VISIBLE);
-    }
-
-    protected void onPostExecute(List<Comic> comics) {
-        //super.onPostExecute(comics);
-        //((HomeFragment)listener).setProgressBarVisibility(View.GONE);
-        //listener.onTaskCompleted(comics);
-        //listener.onTaskCompleted(comics);
-    }
-
     @Nullable
     @Override
     public List<Comic> loadInBackground() {
@@ -150,20 +109,32 @@ public class ComicLoader extends AsyncTaskLoader<List<Comic>> implements Seriali
 
         Uri builtURI = null;
 
-        builtURI = Uri.parse(MARVEL_BASE_URL_COMICS).buildUpon()
-                .appendQueryParameter(TIME_STAMP, "1")
-                .appendQueryParameter(TITLE_STAMP, searchText)
-                .appendQueryParameter(API_KEY, "f87fcb47ed4e50c7c9736f88c40518ca")
-                .appendQueryParameter(HASH_MD5, "6199108e5f83d03422c12931ed4b05eb")
-                .appendQueryParameter(LIMIT, "100")
-                .build();
+        if(searchText.isEmpty()) {
 
+            builtURI = Uri.parse(MARVEL_BASE_URL_COMICS).buildUpon()
+                    .appendQueryParameter(TIME_STAMP, "1")
+                    .appendQueryParameter(DATE_DESCRIPTOR, "thisMonth")
+                    .appendQueryParameter(API_KEY, "f87fcb47ed4e50c7c9736f88c40518ca")
+                    .appendQueryParameter(HASH_MD5, "6199108e5f83d03422c12931ed4b05eb")
+                    .appendQueryParameter(LIMIT, "100")
+                    .build();
+
+        } else{
+            builtURI = Uri.parse(MARVEL_BASE_URL_COMICS).buildUpon()
+                    .appendQueryParameter(TIME_STAMP, "1")
+                    .appendQueryParameter(TITLE_STAMP, searchText)
+                    .appendQueryParameter(API_KEY, "f87fcb47ed4e50c7c9736f88c40518ca")
+                    .appendQueryParameter(HASH_MD5, "6199108e5f83d03422c12931ed4b05eb")
+                    .appendQueryParameter(LIMIT, "100")
+                    .build();
+        }
         String url = builtURI.toString();
         try {
             return downloadURL(url);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
     }
 
     public interface OnTaskCompleted {

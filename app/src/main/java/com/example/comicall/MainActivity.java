@@ -5,9 +5,16 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
 
+import com.example.comicall.fragments.FavoritesFragment;
+import com.example.comicall.fragments.HomeFragment;
+import com.example.comicall.fragments.NotificationsFragment;
+import com.example.comicall.fragments.ProfileFragment;
+import com.example.comicall.fragments.SearchFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {
@@ -25,6 +32,13 @@ public class MainActivity extends AppCompatActivity {
         BottomNavigationView navigation = findViewById(R.id.bottom_navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
+        Bundle extras = getIntent().getExtras();
+
+        SharedPreferences preferences = getSharedPreferences("MY_APP_PREFERENCES", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString("USER_EMAIL", extras.getString("email"));
+        editor.apply();
+
         loadFragment(homeFragment);
     }
     private final BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -40,9 +54,9 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.searchFragment:
                     loadFragment(searchFragment);
                     return true;
-                case R.id.notificationsFragment:
+                /*case R.id.notificationsFragment:
                     loadFragment(notificationsFragment);
-                    return true;
+                    return true;*/
                 case R.id.profileFragment:
                     loadFragment(profileFragment);
                     return true;

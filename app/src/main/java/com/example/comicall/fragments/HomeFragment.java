@@ -1,19 +1,26 @@
-package com.example.comicall;
+package com.example.comicall.fragments;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.loader.app.LoaderManager;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ProgressBar;
 
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.comicall.R;
+import com.example.comicall.comic.Comic;
+import com.example.comicall.comic.ComicAdapter;
+import com.example.comicall.comic.ComicLoaderCallbacks;
+import com.example.comicall.comic.ComicsUpdateListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +31,7 @@ import java.util.List;
  * Use the {@link HomeFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class HomeFragment extends Fragment implements ComicLoader.OnTaskCompleted{
+public class HomeFragment extends Fragment implements ComicsUpdateListener {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -34,8 +41,11 @@ public class HomeFragment extends Fragment implements ComicLoader.OnTaskComplete
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    private ComicLoaderCallbacks comicLoaderCallbacks;
     private RecyclerView recyclerView;
     private ComicAdapter comicAdapter;
+
     private List<Comic> comicList = new ArrayList<>();
 
     private ProgressBar progressBar;
@@ -70,6 +80,12 @@ public class HomeFragment extends Fragment implements ComicLoader.OnTaskComplete
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
+        comicAdapter = new ComicAdapter(getContext(), new ArrayList<>());
+        comicLoaderCallbacks = new ComicLoaderCallbacks(this,this);
+        LoaderManager loaderManager = LoaderManager.getInstance(this);
+        if(loaderManager.getLoader(0) != null){
+            loaderManager.initLoader(0,null, comicLoaderCallbacks);
+        }
     }
 
     @Override
@@ -82,26 +98,44 @@ public class HomeFragment extends Fragment implements ComicLoader.OnTaskComplete
 
         recyclerView = view.findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 3));
-
+        recyclerView.setAdapter(comicAdapter);
         progressBar = view.findViewById(R.id.progress_bar);
-        this.setProgressBarVisibility(View.GONE);
+        this.setProgressBarVisibility(View.VISIBLE);
+
+        searchComics("");
+
         return view;
     }
 
-    @Override
-    public void onTaskCompleted(List<Comic> comics) {
-        comicList.clear();
-        comicList.addAll(comics);
-        comicAdapter = new ComicAdapter(getContext(), comicList);
-        recyclerView.setAdapter(comicAdapter);
+
+
+
+    public void searchComics (String searchText){
+
+        ConnectivityManager connectivityManager = (ConnectivityManager) getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+        if(!networkInfo.isConnected() || networkInfo == null){
+            return;
+        }
+
+        comicAdapter.cleanList();
+        comicAdapter.notifyDataSetChanged();
+
+
+        Bundle queryBundle = new Bundle();
+        queryBundle.putString(ComicLoaderCallbacks.SEARCH_QUERY, searchText);
+        LoaderManager.getInstance(this)
+                .restartLoader(0, queryBundle, comicLoaderCallbacks);
     }
-    /*
-    @Override
-    public void onResume() {
-        super.onResume();
-        new ComicLoader(getContext(), this).execute();
+
+    public void updateComicsResultList(List<Comic> comics){
+        if(comics == null || comics.isEmpty()){
+            return;
+        }
+        comicAdapter.setComicsData(comics);
+        comicAdapter.notifyDataSetChanged();
     }
-    */
+
     public void setProgressBarVisibility(int visibility){
         this.progressBar.setVisibility(visibility);
     }
