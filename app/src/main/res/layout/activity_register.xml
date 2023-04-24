@@ -109,8 +109,8 @@
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="230dp"
-        android:layout_height="455dp"
+        android:layout_width="197dp"
+        android:layout_height="375dp"
         android:src="@drawable/icono_logo_comicall"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
