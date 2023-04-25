@@ -39,7 +39,7 @@
 
         <Space
             android:layout_width="match_parent"
-            android:layout_height="16dp" />
+            android:layout_height="25dp" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/passwordEditText"
@@ -61,7 +61,7 @@
 
         <Space
             android:layout_width="match_parent"
-            android:layout_height="30dp" />
+            android:layout_height="60dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -94,14 +94,15 @@
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="207dp"
-        android:layout_height="414dp"
+        android:layout_width="210dp"
+        android:layout_height="250dp"
+
         android:src="@drawable/icono_logo_comicall"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.521" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
