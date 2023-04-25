@@ -59,10 +59,10 @@
         <Button
             android:id="@+id/saveButton"
             android:layout_width="wrap_content"
-            android:layout_height="38dp"
+            android:layout_height="35dp"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="12dp"
             android:background="@drawable/button_selector"
             android:text="Guardar cambios"
             android:textColor="@color/white"
@@ -80,26 +80,26 @@
             app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/saveButton"
-            app:layout_constraintVertical_bias="0.188">
+            app:layout_constraintVertical_bias="0.276">
 
 
             <Button
                 android:id="@+id/signoutbutton"
-                android:layout_width="50dp"
-                android:layout_height="38dp"
+                android:layout_width="45dp"
+                android:layout_height="35dp"
                 android:layout_weight="1"
                 android:background="@drawable/button_selector"
                 android:text="Cerrar Sesion"
                 android:textColor="@color/white" />
 
             <Space
-                android:layout_width="10dp"
+                android:layout_width="35dp"
                 android:layout_height="wrap_content" />
 
             <Button
                 android:id="@+id/deleteAccountButton"
-                android:layout_width="50dp"
-                android:layout_height="40dp"
+                android:layout_width="45dp"
+                android:layout_height="35dp"
                 android:layout_weight="1"
                 android:background="@drawable/button_selector"
                 android:text="Borrar cuenta" />
