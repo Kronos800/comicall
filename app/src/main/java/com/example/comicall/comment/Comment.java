@@ -42,28 +42,28 @@ public class Comment implements Serializable {
         }
         long diff = now - time;
         if(diff < MINUTE_MILLIS){
-            return "Just now";
+            return "Justo ahora";
         }
         else if(diff < 2 * MINUTE_MILLIS){
-            return "A minute ago";
+            return "Hace un minuto";
         }
         else if(diff < 60*MINUTE_MILLIS){
             long time_dif = diff/MINUTE_MILLIS;
-            return time_dif + " minutes ago";
+            return "Hace "+time_dif+ " minutos";
         }
         else if(diff < 2*HOUR_MILLIS){
-            return "An hour ago";
+            return "Hace una hora";
         }
         else if (diff < 24*HOUR_MILLIS) {
             long time_dif = diff/HOUR_MILLIS;
-            return time_dif + " hours ago";
+            return "Hace "+time_dif + " horas";
         }
         else if(diff < 48*HOUR_MILLIS){
-            return "yesterday";
+            return "Ayer";
         }
         else{
             long time_diff = diff/DAY_MILLIS;
-            return time_diff + " days Ago";
+            return "Hace " + time_diff + " días";
         }
     }
 }

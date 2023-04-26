@@ -55,7 +55,7 @@ public class CommentsAdapter extends RecyclerView.Adapter<CommentsAdapter.ViewHo
             holder.timeAgo.setText(timeAgo);
         } else {
             comment.setJustAdded(false);
-            holder.timeAgo.setText("Just now");
+            holder.timeAgo.setText("Justo ahora");
         }
 
     }

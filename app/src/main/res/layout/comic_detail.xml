@@ -102,7 +102,7 @@
                         android:layout_height="wrap_content"
                         android:ellipsize="end"
                         android:padding="2dp"
-                        android:text="Comic title"
+                        android:text="Título del comic"
                         android:textAppearance="@style/TextAppearance.AppCompat.Title"
                         android:textColor="@android:color/white"
                         android:textSize="20dp"
@@ -157,7 +157,7 @@
                                 android:layout_height="wrap_content"
                                 android:ellipsize="end"
                                 android:padding="2dp"
-                                android:text="Writer:"
+                                android:text="Escritor:"
                                 android:textAppearance="@style/TextAppearance.AppCompat.Title"
                                 android:textColor="@android:color/white"
                                 android:textSize="15dp" />
@@ -186,7 +186,7 @@
                                 android:layout_height="wrap_content"
                                 android:ellipsize="end"
                                 android:padding="2dp"
-                                android:text="Penciler:"
+                                android:text="Dibujante:"
                                 android:textAppearance="@style/TextAppearance.AppCompat.Title"
                                 android:textColor="@android:color/white"
                                 android:textSize="15dp" />
@@ -234,7 +234,7 @@
                     android:maxLines="10"
                     android:padding="2dp"
                     android:singleLine="false"
-                    android:text="Description:"
+                    android:text="Descripción:"
                     android:textAppearance="@style/TextAppearance.AppCompat.Title"
                     android:textColor="@android:color/white"
                     android:textSize="15dp" />
@@ -277,7 +277,7 @@
                     android:maxLength="30"
                     android:maxLines="2"
                     android:padding="2dp"
-                    android:text="Rate the comic:"
+                    android:text="Valora el comic"
                     android:textAppearance="@style/TextAppearance.AppCompat.Title"
                     android:textColor="@android:color/white"
                     android:textSize="15dp" />
@@ -306,7 +306,7 @@
                     android:maxLines="10"
                     android:padding="2dp"
                     android:singleLine="false"
-                    android:text="Comments:"
+                    android:text="Comentarios:"
                     android:textAppearance="@style/TextAppearance.AppCompat.Title"
                     android:textColor="@android:color/white"
                     android:textSize="15dp" />

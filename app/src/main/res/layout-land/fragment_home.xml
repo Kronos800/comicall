@@ -27,7 +27,7 @@
             android:maxLines="10"
             android:padding="2dp"
             android:singleLine="false"
-            android:text="LATEST COMICS THIS MONTH!!"
+            android:text="ÚLTIMOS COMICS DEL MES!!"
             android:textAppearance="@style/TextAppearance.AppCompat.Title"
             android:textColor="@android:color/white"
             android:textSize="15dp" />

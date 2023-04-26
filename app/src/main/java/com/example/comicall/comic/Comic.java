@@ -121,7 +121,7 @@ public class Comic implements Serializable {
     }
     public String getDescription() {
         if(description.equals("null") || description.isEmpty() || description.equals("#N/A"))
-            return "No description";
+            return "Sin descripción";
         return description;
     }
     public String getThumbnailUrl(){return image;}
@@ -134,7 +134,7 @@ public class Comic implements Serializable {
             if(creator.getRole().equals("writer"))
                 return creator.getName();
         }
-        return "No writer credits";
+        return "Sin créditos de Escritor";
     }
 
     public String getPencilerName() {
@@ -142,7 +142,7 @@ public class Comic implements Serializable {
             if(creator.getRole().equals("penciler (cover)"))
                 return creator.getName();
         }
-        return "No penciler credits";
+        return "Sin créditos de dibujantes";
     }
 
     public String getMarvel_url() {
