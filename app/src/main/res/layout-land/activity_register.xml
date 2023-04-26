@@ -11,7 +11,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="150dp"
+        android:layout_marginTop="130dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
         android:orientation="vertical"
@@ -19,6 +19,29 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/usernameEditText"
+            style="@style/TextInputLayoutStyle"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:boxBackgroundColor="@color/white"
+            app:hintEnabled="false">
+
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/username_edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Nombre de usuario"
+                android:textColor="@color/marvel_grey"
+                android:textColorHint="@color/marvel_grey" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="16dp"
+            android:layout_weight="1" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/emailEditText"
@@ -32,14 +55,14 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColorHint="@color/marvel_grey"
+                android:hint="Email"
                 android:textColor="@color/marvel_grey"
-                android:hint="Email" />
+                android:textColorHint="@color/marvel_grey" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <Space
             android:layout_width="match_parent"
-            android:layout_height="25dp" />
+            android:layout_height="16dp" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/passwordEditText"
@@ -53,15 +76,15 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColorHint="@color/marvel_grey"
-                android:textColor="@color/marvel_grey"
                 android:hint="Contraseña"
-                android:inputType="textPassword" />
+                android:inputType="textPassword"
+                android:textColor="@color/marvel_grey"
+                android:textColorHint="@color/marvel_grey" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <Space
             android:layout_width="match_parent"
-            android:layout_height="60dp" />
+            android:layout_height="15dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -70,39 +93,30 @@
 
             <Button
                 android:id="@+id/signUpButton"
-                android:layout_width="50dp"
+                android:layout_width="match_parent"
                 android:layout_height="40dp"
-                android:layout_weight="1"
                 android:background="@drawable/rounded_custom_button"
-                android:text="Registrar"
+                android:enabled="false"
+                android:text="Registrarse"
                 android:textColor="@color/white" />
 
             <Space
                 android:layout_width="10dp"
                 android:layout_height="wrap_content" />
 
-            <Button
-                android:id="@+id/loginButton"
-                android:layout_width="50dp"
-                android:layout_height="40dp"
-                android:layout_weight="1"
-                android:background="@drawable/rounded_custom_button"
-                android:text="Acceder"
-                android:textColor="@color/white" />
         </LinearLayout>
     </LinearLayout>
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="210dp"
-        android:layout_height="250dp"
-
+        android:layout_width="114dp"
+        android:layout_height="110dp"
         android:src="@drawable/icono_logo_comicall"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintHorizontal_bias="0.512"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.521" />
+        app:layout_constraintVertical_bias="0.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
